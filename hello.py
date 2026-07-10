@@ -1,4 +1,6 @@
 import os
+
+from anyio.itertools import chain
 from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_openrouter import ChatOpenRouter
@@ -24,23 +26,31 @@ summary_template =  f"""
  2 - Two facts interests about them
 
 """
-
 summary_template_prompt = PromptTemplate(
     input_variables=["information"],
     template=summary_template,
 )
 
+#temperature depende do objetivo
+#valores baixos e bom para programção e tudo que envolve respostas mais certeiras
+#valores mais altos e bom para envolve criativdade
+
+#abaixo de 0.7 Respostas mais determinísticas, previsíveis,
+# "sempre a opção mais provável"Código, extração de dados,
+# respostas factuais, matemática, tarefas onde você quer consistência
+
+#0.7 a 1.0 Mais variação, respostas diferentes a cada execuçãoBrainstorm,
+# escrita criativa, storytelling, geração de ideias
+# > 1.0 (muito alta)Pode começar a gerar texto incoerente ou "aleatório demais"
 llm = ChatOpenRouter(
     model="tencent/hy3",
     temperature=0,
-    api_key= SecretStr(apiKey or ""),
-    openrouter_provider={"order": ["Tencent"]}
+    api_key=SecretStr(apiKey or ""),
+    openrouter_provider={"order": ["Tencent"]},
 )
 chain = summary_template_prompt | llm
 response = chain.invoke(input={"information": information})
 print(response.content)
-
-
 
 
 def main():

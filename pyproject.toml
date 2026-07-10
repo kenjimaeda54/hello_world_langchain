@@ -10,4 +10,5 @@ dependencies = [
     "langchain-openrouter>=0.2.6",
     "langchain>=1.3.12",
     "python-dotenv>=1.2.2",
+    "langsmith[claude-agent-sdk]>=0.10.0",
 ]
